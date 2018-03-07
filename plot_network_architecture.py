@@ -2,9 +2,9 @@ from ROOT import *
 from math import *
 from keras.models import model_from_json
 
-#network_orientation = "horizontal"
-network_orientation = "vertical"
-isp = 1.8 #internal separation factor - sets the space between hidden layers
+network_orientation = "horizontal"
+#network_orientation = "vertical"
+isp = 1.2 #internal separation factor - sets the space between hidden layers (it doesn't work very well for more than 1 hidden layer)
 
 #screen optimization
 def screen_opt( n_nodes, max_nodes ):
@@ -31,7 +31,7 @@ json_file = open('model.json','r')
 loaded_model_json = json_file.read()
 json_file.close()
 model = model_from_json(loaded_model_json)
-model.load_weights('KerasNewScans2/weights/best_weights2175.hdf5')
+model.load_weights('KerasNewScans2/weights/best_weights543.hdf5')
 
 #compile the model
 model.compile(loss='binary_crossentropy', optimizer='adam',metrics=['accuracy'])
@@ -176,8 +176,9 @@ for ilayer in range(nlayers):
 	  continue
 	
 	#creates the line connections (synapses)
+	#
 	if(network_orientation == "horizontal"):
-	  l[il] = TLine(ilayer,pinput_i,isp*(ilayer+1),pinput_f)
+	  l[il] = TLine(isp*ilayer,pinput_i,isp*(ilayer+1),pinput_f)
 	if(network_orientation == "vertical"):
 	  l[il] = TLine(pinput_i,ilayer,pinput_f,isp*(ilayer+1))
 	l[il].SetLineColor( kViolet + w_to_c(norm_weight) )
